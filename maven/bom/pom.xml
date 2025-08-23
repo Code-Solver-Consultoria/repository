@@ -10,7 +10,7 @@
   <name>bom</name>
   <packaging>pom</packaging>
   <description>Configurações iniciais para projetos Maven, utilizando o Github como repositório para projetos da Code Solver.</description>
-  <url>https://io.github.code-solver-consultoria/repository/${project.artifactId}-${project.version}</url>
+  <url>https://code-solver-consultoria.github.io/repository/${project.artifactId}-${project.version}</url>
 
   <properties>
     <!-- Configurações de ambiente -->
@@ -91,7 +91,7 @@
     <site>
       <id>codesolver</id>
       <name>Repositório de Relatórios do Maven no GitHub</name>
-      <url>scm:git:ssh://git@github.com:Code-Solver-Consultoria/repository.git</url>
+      <url>scm:git:https://github.com/Code-Solver-Consultoria/repository.git</url>
     </site>
   </distributionManagement>
 
