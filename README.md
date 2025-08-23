@@ -21,20 +21,16 @@ Crie um arquivo de configuração para o Maven se integrar ao GitHub durante as 
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
   <activeProfiles>
-    <activeProfile>github</activeProfile>
+    <activeProfile>codesolver</activeProfile>
   </activeProfiles>
 
   <profiles>
     <profile>
-      <id>github</id>
+      <id>codesolver</id>
       <repositories>
         <repository>
-          <id>central</id>
-          <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-          <id>github</id>
-          <url>https://maven.pkg.github.com/lvrodrigues/repository</url>
+          <id>codesolver</id>
+          <url>https://maven.pkg.github.com/code-solver-consultoria/repository</url>
           <snapshots>
             <enabled>true</enabled>
           </snapshots>
@@ -45,7 +41,7 @@ Crie um arquivo de configuração para o Maven se integrar ao GitHub durante as 
 
   <servers>
     <server>
-      <id>github</id>
+      <id>codesolver</id>
       <username>GITHUB_USERNAME</username>
       <password>GITHUB_ACCESS_TOKEN</password>
     </server>
