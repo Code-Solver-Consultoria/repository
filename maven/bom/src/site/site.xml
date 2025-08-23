@@ -49,6 +49,12 @@
                 <ribbonOrientation>right</ribbonOrientation>
                 <ribbonColor>black</ribbonColor>
             </gitHub>
+            <topBarIcon>
+                <name>return</name>
+                <alt>Retornar para a lista inicial</alt>
+                <src>/images/return.png</src>
+                <href>/</href>
+            </topBarIcon>
         </fluidoSkin>
     </custom>
 </site>
