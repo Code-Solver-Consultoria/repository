@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>br.com.codesolver</groupId>
+  <artifactId>bom</artifactId>
+  <version>21.0.0</version>
+  <name>bom</name>
+  <packaging>pom</packaging>
+  <description>Configurações iniciais para projetos Maven, utilizando o Github como repositório para projetos da Code Solver.</description>
+  <url>https://io.github.code-solver-consultoria/repository/${project.artifactId}-${project.version}</url>
+
+  <properties>
+    <!-- Configurações de ambiente -->
+    <maven.binary.version>3.9.11</maven.binary.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <scm.url>scm:git:https://github.com/Code-Solver-Consultoria/repository.git</scm.url>
+    <gh-pages.url>scm:git:https://github.com/Code-Solver-Consultoria/repository.git</gh-pages.url>
+    <spotbugs.exclusions.file>codesolver-spotbugs-exclusions.xml</spotbugs.exclusions.file>
+    <spotbugs.exclusions.location>${project.build.directory}/${spotbugs.exclusions.file}</spotbugs.exclusions.location>
+    <checkstyle.suppressions.file>codesolver-checkstyle-suppressions.xml</checkstyle.suppressions.file>
+    <checkstyle.suppressions.location>${project.build.directory}/${checkstyle.suppressions.file}</checkstyle.suppressions.location>
+    <checkstyle.config.file>codesolver-checkstyle-config.xml</checkstyle.config.file>
+    <checkstyle.config.location>${project.build.directory}/${checkstyle.config.file}</checkstyle.config.location>
+    <!-- Plugin de Restrição e Ambiente -->
+    <maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
+    <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+    <!-- Plugins de Construção -->
+    <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+    <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+    <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+    <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+    <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
+    <maven-site-plugin.version>3.21.0</maven-site-plugin.version>
+    <!-- Plugins de Gerenciamento de Código -->
+    <maven-scm-publish-plugin.version>3.3.0</maven-scm-publish-plugin.version>
+    <gitflow-maven-plugin.version>1.21.0</gitflow-maven-plugin.version>
+    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+    <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+    <spotbugs-maaven-plugin.version>4.9.3.2</spotbugs-maaven-plugin.version>
+    <!-- Plugins de Relatórios -->
+    <maven-project-info-reports-plugin.version>3.9.0</maven-project-info-reports-plugin.version>
+    <maven-jxr-plugin.version>3.6.0</maven-jxr-plugin.version>
+    <maven-pmd-plugin.version>3.27.0</maven-pmd-plugin.version>
+    <maven-javadoc-plugin.version>3.11.2</maven-javadoc-plugin.version>
+    <maven-changelog-plugin.version>3.0.0-M1</maven-changelog-plugin.version>
+    <taglist-maven-plugin.version>3.2.1</taglist-maven-plugin.version>
+    <!-- Ferramentas -->
+    <checkstyle.version>11.0.0</checkstyle.version>
+    <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
+    <!-- Biblitecas que devem ser fixadas. -->
+    <asm.version>9.8</asm.version>
+    <spotbugs-annotations.version>4.9.4</spotbugs-annotations.version>
+    <!-- Limiares JaCoCo. Aumente gradualmente à medida que você adiciona testes. -->
+    <jacoco.unit-tests.limit.instruction-ratio>0%</jacoco.unit-tests.limit.instruction-ratio>
+    <jacoco.unit-tests.limit.branch-ratio>0%</jacoco.unit-tests.limit.branch-ratio>
+    <jacoco.unit-tests.limit.class-complexity>20</jacoco.unit-tests.limit.class-complexity>
+    <jacoco.unit-tests.limit.method-complexity>5</jacoco.unit-tests.limit.method-complexity>
+  </properties>
+
+  <developers>
+    <developer>
+      <!--
+        ID do GIT. Não valeu a pena usar devido a problemas nos relatórios 
+        no momento de gerar os links para os usuários. A página corrente
+        chama-se teams.html e os links procuram por teams-list.html.
+      <id>Luciano Vieira Rodrigues &lt;codesolverline@gmail.com&gt;</id>
+      -->
+      <id>LVRodrigues</id>
+      <name>Luciano Vieira Rodrigues</name>
+      <email>luciano@codesolver.com.br</email>
+      <url>https://www.linkedin.com/in/luciano-rodrigues/</url>
+      <timezone>America/Sao_Paulo</timezone>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <distributionManagement>
+    <repository>
+      <id>codesolver</id>
+      <name>Repositório Maven no GitHub</name>
+      <url>https://maven.pkg.github.com/code-solver-consultoria/repository</url>
+    </repository>
+    <site>
+      <id>codesolver</id>
+      <name>Repositório de Relatórios do Maven no GitHub</name>
+      <url>${gh-pages.url}</url>
+    </site>
+  </distributionManagement>
+
+  <scm>
+    <connection>${scm.url}</connection>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/Code-Solver-Consultoria/repository/issues</url>
+  </issueManagement>
+
+  <build>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <filtering>true</filtering>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+    <pluginManagement>
+      <plugins>
+        <!-- Plugin de Restrição de Ambiente -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${maven-enforcer-plugin.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <requireMavenVersion>
+                    <version>${maven.binary.version}</version>
+                  </requireMavenVersion>
+                  <requireJavaVersion>
+                    <version>${maven.compiler.release}</version>
+                  </requireJavaVersion>
+                </rules>
+                <fail>true</fail>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>${maven-antrun-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>spotbugs-exclusions</id>
+              <phase>initialize</phase>
+              <configuration>
+                <target>
+                  <echoxml file="${spotbugs.exclusions.location}">
+                    <FindBugsFilter>
+                      <Match>
+                        <Source name="~.*\_.java" />
+                      </Match>
+                    </FindBugsFilter>
+                  </echoxml>
+                </target>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>checkstyle-suppressions</id>
+              <phase>initialize</phase>
+              <configuration>
+                <target>
+                  <echo file="${checkstyle.suppressions.location}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+  "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+  "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+]]>
+                  </echo>
+                  <echoxml file="${checkstyle.suppressions.location}" append="true">
+                    <suppressions>
+                      <!-- Ajustes para Testes unitários. -->
+                      <suppress checks="MissingCtor"
+                        files="[a-z,A-Z,0-9]*(Test)[a-z,A-Z,0-9]*(.java)" />
+                      <suppress checks="MagicNumber"
+                        files="[a-z,A-Z,0-9]*(Test)[a-z,A-Z,0-9]*(.java)" />
+                      <suppress checks="MultipleStringLiterals"
+                        files="[a-z,A-Z,0-9]*(Test)[a-z,A-Z,0-9]*(.java)" />
+                      <!-- Filtro de supressão para modelagem da JPA. -->
+                      <suppress checks="JavadocType" files="[a-z,A-Z,0-9]*(_.java)" />
+                      <suppress checks="TypeName" files="[a-z,A-Z,0-9]*(_.java)" />
+                      <suppress checks="JavadocVariable" files="[a-z,A-Z,0-9]*(_.java)" />
+                      <suppress checks="JavadocPackage" files="[a-z,A-Z,0-9]*(_.java)" />
+                    </suppressions>
+                  </echoxml>
+                </target>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>checkstyle-config</id>
+              <phase>initialize</phase>
+              <configuration>
+                <target>
+                  <echo file="${checkstyle.config.location}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC
+  "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
+]]>
+                  </echo>
+                  <echoxml file="${checkstyle.config.location}" append="true">
+                    <module name="Checker">
+                      <!-- Removendo a validação do descritor de módulos java -->
+                      <module name="BeforeExecutionExclusionFileFilter">
+                        <property name="fileNamePattern" value="module\-info\.java$" />
+                      </module>
+                      <!-- Filtro de supreesão de testes -->
+                      <module name="SuppressionFilter">
+                        <property name="file" value="${checkstyle.suppressions.location}" />
+                      </module>
+                      <!-- Tamanho máximo do arquivo. -->
+                      <module name="FileLength">
+                        <property name="max" value="2000" />
+                        <property name="fileExtensions" value="java" />
+                      </module>
+                      <!-- Tamanho máximo das linhas de código -->
+                      <module name="LineLength">
+                        <property name="max" value="130" />
+                        <property name="ignorePattern" value="^ *\* *[^ ]+$" />
+                        <property name="fileExtensions" value="java" />
+                      </module>
+                      <!-- Anotação para suprimir alertas de verificação. -->
+                      <module name="SuppressWarningsFilter" />
+                      <!-- Documentação de pacotes por Javadoc -->
+                      <module name="JavadocPackage" />
+                      <!-- Outros -->
+                      <module name="NewlineAtEndOfFile" />
+                      <module name="OrderedProperties" />
+                      <module name="Translation" />
+                      <module name="UniqueProperties" />
+                      <!-- Conteúdo dos arquivos -->
+                      <module name="TreeWalker">
+                        <!-- Configuração das mensagens. -->
+                        <property name="tabWidth" value="4" />
+                        <!-- Anotações e comentários para gerenciar alertas de verificação. -->
+                        <module name="SuppressWarnings" />
+                        <module name="SuppressWarningsHolder" />
+                        <module name="SuppressionCommentFilter" />
+                        <!-- Imports -->
+                        <module name="AvoidStarImport" />
+                        <module name="AvoidStaticImport" />
+                        <module name="IllegalImport" />
+                        <module name="ImportOrder">
+                          <property name="groups" value="/^java\./,javax,org,com" />
+                          <property name="ordered" value="false" />
+                          <property name="separated" value="true" />
+                          <property name="option" value="above" />
+                          <property name="sortStaticImportsAlphabetically" value="true" />
+                        </module>
+                        <module name="RedundantImport" />
+                        <module name="UnusedImports" />
+                        <!-- Javadocs -->
+                        <module name="InvalidJavadocPosition" />
+                        <module name="JavadocContentLocationCheck" />
+                        <module name="JavadocMethod" />
+                        <module name="JavadocMissingLeadingAsterisk" />
+                        <module name="JavadocMissingWhitespaceAfterAsterisk" />
+                        <module name="JavadocParagraph" />
+                        <module name="JavadocStyle" />
+                        <module name="JavadocTagContinuationIndentation" />
+                        <module name="JavadocType">
+                          <property name="allowUnknownTags" value="true" />
+                        </module>
+                        <module name="JavadocVariable" />
+                        <module name="MissingJavadocMethod">
+                          <property name="allowMissingPropertyJavadoc" value="true" />
+                          <property name="ignoreMethodNamesRegex" value="(hashCode|equals)" />
+                        </module>
+                        <module name="MissingJavadocPackage" />
+                        <module name="MissingJavadocType" />
+                        <module name="NonEmptyAtclauseDescription" />
+                        <module name="RequireEmptyLineBeforeBlockTagGroup" />
+                        <module name="SummaryJavadoc" />
+                        <!-- Verificação de tags -->
+                        <module name="WriteTag">
+                          <property name="tag" value="@incomplete" />
+                          <property name="tagFormat" value="\S" />
+                          <property name="severity" value="ignore" />
+                          <property name="tagSeverity" value="warning" />
+                        </module>
+                        <!-- Verificação de Blocos -->
+                        <module name="AvoidNestedBlocks" />
+                        <module name="EmptyBlock" />
+                        <module name="EmptyCatchBlock" />
+                        <module name="LeftCurly" />
+                        <module name="RightCurly" />
+                        <module name="NeedBraces" />
+                        <!-- Desenho das Classes -->
+                        <module name="FinalClass" />
+                        <module name="HideUtilityClassConstructor" />
+                        <module name="InterfaceIsType" />
+                        <module name="MutableException" />
+                        <module name="OneTopLevelClass" />
+                        <module name="ThrowsCount">
+                          <property name="max" value="3" />
+                        </module>
+                        <!-- Anotações -->
+                        <module name="AnnotationLocation" />
+                        <module name="AnnotationUseStyle" />
+                        <module name="MissingDeprecated" />
+                        <module name="MissingOverride" />
+                        <module name="PackageAnnotation" />
+                        <!-- Codificação -->
+                        <module name="AvoidDoubleBraceInitialization" />
+                        <module name="AvoidInlineConditionals" />
+                        <module name="AvoidNoArgumentSuperConstructorCall" />
+                        <module name="CovariantEquals" />
+                        <module name="DeclarationOrder" />
+                        <module name="DefaultComesLast" />
+                        <module name="EmptyStatement" />
+                        <module name="EqualsAvoidNull" />
+                        <module name="EqualsHashCode" />
+                        <module name="FallThrough" />
+                        <module name="HiddenField">
+                          <property name="ignoreConstructorParameter" value="true" />
+                          <property name="ignoreSetter" value="true" />
+                        </module>
+                        <module name="IllegalCatch" />
+                        <module name="IllegalInstantiation" />
+                        <module name="IllegalThrows" />
+                        <module name="IllegalToken" />
+                        <module name="IllegalType">
+                          <property name="ignoredMethodNames" value="getInstance" />
+                        </module>
+                        <module name="InnerAssignment" />
+                        <module name="MagicNumber" />
+                        <module name="MissingSwitchDefault" />
+                        <module name="ModifiedControlVariable" />
+                        <module name="MultipleStringLiterals" />
+                        <module name="MultipleVariableDeclarations" />
+                        <module name="NestedForDepth">
+                          <property name="max" value="2" />
+                        </module>
+                        <module name="NestedIfDepth">
+                          <property name="max" value="2" />
+                        </module>
+                        <module name="NestedTryDepth" />
+                        <module name="NoArrayTrailingComma" />
+                        <module name="NoEnumTrailingComma" />
+                        <module name="NoFinalizer" />
+                        <module name="OneStatementPerLine" />
+                        <module name="OverloadMethodsDeclarationOrder" />
+                        <module name="PackageDeclaration" />
+                        <module name="ParameterAssignment" />
+                        <module name="RequireThis" />
+                        <module name="ReturnCount">
+                          <property name="max" value="3" />
+                        </module>
+                        <module name="SimplifyBooleanExpression" />
+                        <module name="SimplifyBooleanReturn" />
+                        <module name="StringLiteralEquality" />
+                        <module name="SuperClone" />
+                        <module name="UnnecessaryParentheses" />
+                        <module name="UnnecessarySemicolonAfterOuterTypeDeclaration" />
+                        <module name="UnnecessarySemicolonAfterTypeMemberDeclaration" />
+                        <module name="UnnecessarySemicolonInEnumeration" />
+                        <module name="UnnecessarySemicolonInTryWithResources" />
+                        <module name="UnusedLocalVariable" />
+                        <module name="VariableDeclarationUsageDistance">
+                          <property name="allowedDistance" value="5" />
+                        </module>
+                        <!-- Métricas -->
+                        <module name="BooleanExpressionComplexity" />
+                        <module name="ClassDataAbstractionCoupling" />
+                        <module name="ClassFanOutComplexity" />
+                        <module name="CyclomaticComplexity" />
+                        <module name="NPathComplexity" />
+                        <module name="JavaNCSS" />
+                        <!-- Espaçamentos -->
+                        <module name="EmptyForInitializerPad" />
+                        <module name="EmptyForIteratorPad" />
+                        <module name="EmptyForIteratorPad" />
+                        <module name="EmptyLineSeparator">
+                          <property name="allowMultipleEmptyLines" value="false" />
+                        </module>
+                        <module name="GenericWhitespace" />
+                        <module name="MethodParamPad" />
+                        <module name="NoLineWrap" />
+                        <module name="NoWhitespaceAfter">
+                          <property name="tokens" value="DOT" />
+                          <property name="allowLineBreaks" value="false" />
+                        </module>
+                        <module name="NoWhitespaceBefore">
+                          <property name="allowLineBreaks" value="true" />
+                        </module>
+                        <module name="NoWhitespaceBeforeCaseDefaultColon" />
+                        <module name="ParenPad" />
+                        <module name="TypecastParenPad" />
+                        <module name="WhitespaceAround" />
+                        <!-- Outros -->
+                        <module name="ArrayTypeStyle" />
+                        <module name="CommentsIndentation" />
+                        <module name="Indentation" />
+                        <module name="NoCodeInFile" />
+                        <module name="OuterTypeFilename" />
+                        <module name="TodoComment">
+                          <property name="format" value="(TODO|FIXME)" />
+                        </module>
+                        <module name="UncommentedMain">
+                          <property name="excludedClasses" value="\.Main$|\.Application$" />
+                        </module>
+                        <module name="UpperEll" />
+                        <!-- Modificadores -->
+                        <module name="RedundantModifier" />
+                        <!-- Definições de nomes -->
+                        <module name="AbbreviationAsWordInName" />
+                        <module name="AbstractClassName" />
+                        <module name="CatchParameterName" />
+                        <module name="ClassTypeParameterName" />
+                        <module name="ConstantName" />
+                        <module name="IllegalIdentifierName" />
+                        <module name="InterfaceTypeParameterName" />
+                        <module name="LambdaParameterName" />
+                        <module name="LocalFinalVariableName" />
+                        <module name="LocalVariableName" />
+                        <module name="MemberName" />
+                        <module name="MethodName" />
+                        <module name="MethodTypeParameterName" />
+                        <module name="PackageName" />
+                        <module name="ParameterName" />
+                        <module name="PatternVariableName" />
+                        <module name="RecordComponentName" />
+                        <module name="RecordTypeParameterName" />
+                        <module name="StaticVariableName" />
+                        <module name="TypeName" />
+                        <!-- Tamanhos -->
+                        <module name="AnonInnerLength" />
+                        <module name="ExecutableStatementCount" />
+                        <module name="LambdaBodyLength">
+                          <property name="max" value="15" />
+                        </module>
+                        <module name="MethodCount">
+                          <property name="maxTotal" value="30" />
+                        </module>
+                        <module name="MethodLength">
+                          <property name="tokens" value="METHOD_DEF" />
+                          <property name="max" value="60" />
+                          <property name="countEmpty" value="false" />
+                        </module>
+                        <module name="OuterTypeNumber" />
+                        <module name="ParameterNumber" />
+                        <module name="RecordComponentNumber">
+                          <property name="max" value="3" />
+                          <property name="accessModifiers" value="private" />
+                        </module>
+                        <module name="RecordComponentNumber">
+                          <property name="max" value="10" />
+                          <property name="accessModifiers" value="public" />
+                        </module>
+                      </module>
+                    </module>
+                  </echoxml>
+                </target>
+              </configuration>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Plugins de Construção -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${maven-source-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>jar-no-fork</goal>
+                <goal>test-jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven-resources-plugin.version}</version>
+          <configuration>
+            <nonFilteredFileExtensions>
+              <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+              <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+              <nonFilteredFileExtension>jasper</nonFilteredFileExtension>
+              <nonFilteredFileExtension>rptdesign</nonFilteredFileExtension>
+              <nonFilteredFileExtension>rptlibrary</nonFilteredFileExtension>
+              <nonFilteredFileExtension>png</nonFilteredFileExtension>
+              <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+              <nonFilteredFileExtension>jpeg</nonFilteredFileExtension>
+              <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+            </nonFilteredFileExtensions>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven-jar-plugin.version}</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addClasspath>true</addClasspath>
+              </manifest>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>test-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${maven-failsafe-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>integration-test</id>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${maven-site-plugin.version}</version>
+          <configuration>
+            <locales>default,en</locales>
+            <skipDeploy>true</skipDeploy>
+          </configuration>
+        </plugin>
+        <!-- Plugins de Gerenciamento de Código -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-publish-plugin</artifactId>
+          <version>${maven-scm-publish-plugin.version}</version>
+          <configuration>
+            <scmBranch>gh-pages</scmBranch>
+            <subDirectory>${project.artifactId}-${project.version}</subDirectory>
+            <pubScmUrl>${gh-pages.url}</pubScmUrl>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.amashchenko.maven.plugin</groupId>
+          <artifactId>gitflow-maven-plugin</artifactId>
+          <version>${gitflow-maven-plugin.version}</version>
+          <configuration>
+            <skipFeatureVersion>true</skipFeatureVersion>
+            <gitFlowConfig>
+              <productionBranch>main</productionBranch>
+              <versionTagPrefix>version-</versionTagPrefix>
+            </gitFlowConfig>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven-checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <configLocation>${checkstyle.config.location}</configLocation>
+            <suppressionsLocation>${checkstyle.suppressions.location}</suppressionsLocation>
+            <encoding>UTF-8</encoding>
+            <consoleOutput>false</consoleOutput>
+            <failOnViolation>false</failOnViolation>
+            <linkXRef>true</linkXRef>
+          </configuration>
+          <executions>
+            <execution>
+              <id>checkstyle</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>pre-unit-test</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>post-unit-test</id>
+              <phase>test</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check-unit-test</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+                <rules>
+                  <rule>
+                    <element>BUNDLE</element>
+                    <limits>
+                      <limit>
+                        <counter>INSTRUCTION</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.unit-tests.limit.instruction-ratio}</minimum>
+                      </limit>
+                      <limit>
+                        <counter>BRANCH</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>${jacoco.unit-tests.limit.branch-ratio}</minimum>
+                      </limit>
+                    </limits>
+                  </rule>
+                  <rule>
+                    <element>CLASS</element>
+                    <limits>
+                      <limit>
+                        <counter>COMPLEXITY</counter>
+                        <value>TOTALCOUNT</value>
+                        <maximum>${jacoco.unit-tests.limit.class-complexity}</maximum>
+                      </limit>
+                    </limits>
+                  </rule>
+                  <rule>
+                    <element>METHOD</element>
+                    <limits>
+                      <limit>
+                        <counter>COMPLEXITY</counter>
+                        <value>TOTALCOUNT</value>
+                        <maximum>${jacoco.unit-tests.limit.method-complexity}</maximum>
+                      </limit>
+                    </limits>
+                  </rule>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${spotbugs-maaven-plugin.version}</version>
+          <configuration>
+            <excludeFilterFile>${spotbugs.exclusions.location}</excludeFilterFile>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Plugins de Relatórios -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${maven-pmd-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm</artifactId>
+              <version>${asm.version}</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <analysisCache>true</analysisCache>
+            <analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation>
+            <linkXRef>true</linkXRef>
+            <skipEmptyReport>false</skipEmptyReport>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+                <goal>cpd-check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${maven-javadoc-plugin.version}</version>
+          <configuration>
+            <show>private</show>
+            <additionalOptions>-html5</additionalOptions>
+            <tags>
+              <tag>
+                <name>branch</name>
+                <placement>top</placement>
+                <head>Branch:</head>
+              </tag>
+            </tags>
+          </configuration>
+        </plugin>
+        <!-- Plugins de Ferramentas -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${maven-dependency-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <!-- Execuções de plugins... -->
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${maven-project-info-reports-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${maven-jxr-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${maven-pmd-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${maven-javadoc-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>javadoc</report>
+              <report>test-javadoc</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <id>aggregate</id>
+            <inherited>false</inherited>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+        <version>${maven-changelog-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>${taglist-maven-plugin.version}</version>
+        <configuration>
+          <tagListOptions>
+            <tagClasses>
+              <tagClass>
+                <displayName>Para Desenvolver</displayName>
+                <tags>
+                  <tag>
+                    <matchString>todo</matchString>
+                    <matchType>ignoreCase</matchType>
+                  </tag>
+                </tags>
+              </tagClass>
+              <tagClass>
+                <displayName>Para Corrigir</displayName>
+                <tags>
+                  <tag>
+                    <matchString>FIXME</matchString>
+                    <matchType>exact</matchType>
+                  </tag>
+                </tags>
+              </tagClass>
+            </tagClasses>
+          </tagListOptions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maaven-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>${asm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-annotations</artifactId>
+        <version>${spotbugs-annotations.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
