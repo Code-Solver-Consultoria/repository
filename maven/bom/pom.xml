@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <scm.url>scm:git:ssh://git@github.com:Code-Solver-Consultoria/repository.git</scm.url>
+    <scm.site.url>scm:git:https://github.com/Code-Solver-Consultoria/repository.git</scm.site.url>
     <spotbugs.exclusions.file>codesolver-spotbugs-exclusions.xml</spotbugs.exclusions.file>
     <spotbugs.exclusions.location>${project.build.directory}/${spotbugs.exclusions.file}</spotbugs.exclusions.location>
     <checkstyle.suppressions.file>codesolver-checkstyle-suppressions.xml</checkstyle.suppressions.file>
@@ -91,7 +92,7 @@
     <site>
       <id>codesolver</id>
       <name>Repositório de Relatórios do Maven no GitHub</name>
-      <url>scm:git:https://github.com/Code-Solver-Consultoria/repository.git</url>
+      <url>${scm.site.url}</url>
     </site>
   </distributionManagement>
 
@@ -565,6 +566,7 @@
           <version>${maven-scm-publish-plugin.version}</version>
           <configuration>
             <scmBranch>gh-pages</scmBranch>
+            <pubScmUrl>${scm.site.url}</pubScmUrl>
             <subDirectory>${project.artifactId}-${project.version}</subDirectory>
           </configuration>
         </plugin>
