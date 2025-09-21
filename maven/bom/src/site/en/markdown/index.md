@@ -4,8 +4,8 @@ Initial configurations for Java and Maven projects, using Github as a repository
 
 ## Restrictions
 
-* Java 21
-* Maven 3.9.10
+* Java 25
+* Maven 3.9.0
 
 ## How To Use
 
@@ -17,6 +17,6 @@ Edit the **pom.xml** file for Maven projects to inherit the settings from this p
         <parent>
             <groupId>br.com.codesolver</groupId>
             <artifactId>bom</artifactId>
-            <version>21.0.0</version>
+            <version>25.0.0</version>
         </parent>
     ...
