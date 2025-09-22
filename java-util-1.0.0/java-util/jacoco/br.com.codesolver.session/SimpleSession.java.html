@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleSession.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.session</a> &gt; <span class="el_source">SimpleSession.java</span></div><h1>SimpleSession.java</h1><pre class="source lang-java linenums">package br.com.codesolver.session;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+/**
+ * Objeto que representa a sessão de uma conexão, com as informações do equipamento.
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ */
+public class SimpleSession implements Session {
+
+	/**
+	 * Guarda os parâmetros da sessão.
+	 */
+	private ConcurrentMap&lt;SessionParam&lt;?&gt;, Object&gt; params;
+	
+	/**
+	 * Construtor padrão.
+	 */
+<span class="fc" id="L23">	public SimpleSession() {</span>
+<span class="fc" id="L24">		this.params	= new ConcurrentHashMap&lt;SessionParam&lt;?&gt;, Object&gt;();</span>
+<span class="fc" id="L25">		this.setParam(ID, 0);</span>
+<span class="fc" id="L26">	}</span>
+
+	@SuppressWarnings({ &quot;unchecked&quot;, &quot;rawtypes&quot; })
+	@Override
+	public SessionKey&lt;?&gt; getKey() {
+<span class="nc" id="L31">		return new SessionKey(ID, getParam(ID));</span>
+	}
+
+	@Override
+	public &lt;T&gt; void setParam(SessionParam&lt;T&gt; param, T value) {
+<span class="fc" id="L36">		param.validate(value);</span>
+<span class="fc" id="L37">		params.put(param, value);</span>
+<span class="fc" id="L38">	}</span>
+	
+	@Override
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T&gt; T getParam(SessionParam&lt;T&gt; param) {
+<span class="fc" id="L43">		return (T) params.get(param);</span>
+	}
+
+	@Override
+	public Set&lt;SessionParam&lt;?&gt;&gt; getParams() {
+<span class="fc" id="L48">		return params.keySet(); </span>
+	}
+
+	@Override
+	public int compareTo(Session o) {
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		if (o == null) {</span>
+<span class="fc" id="L54">			throw new SessionRuntimeException(&quot;Não pode comparar com valores nulos.&quot;);</span>
+		}
+<span class="fc" id="L56">		Integer id 	= getParam(ID);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">		if (id == null) {</span>
+<span class="nc" id="L58">			throw new SessionRuntimeException(&quot;O parâmetro ID não foi atribuído para a sessão corrente.&quot;);</span>
+		}
+<span class="fc" id="L60">		Integer other	= o.getParam(ID);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">		if (other == null) {</span>
+<span class="nc" id="L62">			throw new SessionRuntimeException(&quot;O parâmetro ID não foi atribuído para a sessão comparada.&quot;);</span>
+		}
+<span class="fc" id="L64">		return id.compareTo(other);</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L69">		final int prime = 31;</span>
+<span class="nc" id="L70">		int result = 1;</span>
+<span class="nc" id="L71">		result = prime * result;</span>
+<span class="nc" id="L72">		Integer id = getParam(ID);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		if (id != null) {</span>
+<span class="nc" id="L74">			result += id;</span>
+		}
+<span class="nc" id="L76">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L81" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L82">			return true;</span>
+		}
+<span class="pc bpc" id="L84" title="2 of 4 branches missed.">		if (obj == null || getClass() != obj.getClass()) {</span>
+<span class="nc" id="L85">			return false;</span>
+		}
+<span class="fc" id="L87">		SimpleSession other = (SimpleSession) obj;</span>
+<span class="fc" id="L88">		Integer selfID 	= getParam(ID);</span>
+<span class="fc" id="L89">		Integer otherID	= other.getParam(ID);</span>
+<span class="pc bpc" id="L90" title="3 of 4 branches missed.">		if (selfID == null &amp;&amp; otherID == null) {</span>
+<span class="nc" id="L91">			return true;</span>
+<span class="pc bpc" id="L92" title="2 of 4 branches missed.">		} else if (selfID == null || otherID == null) {</span>
+<span class="nc" id="L93">			return false;</span>
+		}
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		return selfID.intValue() == otherID.intValue();</span>
+	}
+	
+	@Override
+	public String toString() {
+<span class="nc" id="L100">		StringBuilder builder = new StringBuilder();</span>
+		
+<span class="nc" id="L102">		builder.append(&quot;Session[&quot;);</span>
+<span class="nc" id="L103">		boolean first = true;</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		for (SessionParam&lt;?&gt; param : getParams()) {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">			if (!first) {</span>
+<span class="nc" id="L106">				builder.append(&quot;,&quot;);</span>
+			}
+<span class="nc" id="L108">			builder.append(param.getName()).append(&quot;=&quot;).append(getParam(param));</span>
+<span class="nc" id="L109">			first = false;</span>
+<span class="nc" id="L110">		}</span>
+<span class="nc" id="L111">		builder.append(&quot;]&quot;);</span>
+		
+<span class="nc" id="L113">		return builder.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

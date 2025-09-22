@@ -1,0 +1,5 @@
+module:br.com.codesolver.util
+br.com.codesolver.digester
+br.com.codesolver.session
+br.com.codesolver.util
+br.com.codesolver.uuid
