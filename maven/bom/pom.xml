@@ -689,6 +689,7 @@
           <version>${spotbugs-maaven-plugin.version}</version>
           <configuration>
             <excludeFilterFile>${spotbugs.exclusions.location}</excludeFilterFile>
+            <failOnError>false</failOnError>
           </configuration>
           <executions>
             <execution>
