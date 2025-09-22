@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SessionParam.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.session</a> &gt; <span class="el_source">SessionParam.java</span></div><h1>SessionParam.java</h1><pre class="source lang-java linenums">package br.com.codesolver.session;
+
+import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Logger;
+
+/**
+ * Os parâmetros da sessão devem possuir nomes únicos e tipos definidos.
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ * @param &lt;T&gt; Tipo de valor para o parâmetro de sessão.
+ */
+public class SessionParam&lt;T&gt; implements Serializable {
+	
+	/**
+	 * Log da classe.
+	 */
+<span class="fc" id="L22">	private static final Logger LOGGER = Logger.getLogger(SessionParam.class.getName());</span>
+	
+	/**
+	 * Nomes dos parâmetros.
+	 */
+<span class="fc" id="L27">	private static final ConcurrentMap&lt;String, Boolean&gt; NAMES = new ConcurrentHashMap&lt;String, Boolean&gt;();</span>
+	
+	/**
+	 * Nome interno do parâmetro.
+	 */
+	private String name;
+
+	/**
+	 * Gerenciamento de nomes de parâmetros.
+	 *
+	 * @param name Nome único do parâmetro.
+	 */
+<span class="fc" id="L39">	public SessionParam(String name) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">		if (name == null) {</span>
+<span class="fc" id="L41">			String message = &quot;Parâmetro não pode ser nulo.&quot;;</span>
+<span class="fc" id="L42">			LOGGER.severe(message);</span>
+<span class="fc" id="L43">			throw new SessionRuntimeException(message);</span>
+		} 
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		if (name.isEmpty()) {</span>
+<span class="fc" id="L46">			String message = &quot;Parâmetro está vazio.&quot;;</span>
+<span class="fc" id="L47">			LOGGER.severe(message);</span>
+<span class="fc" id="L48">			throw new SessionRuntimeException(message);</span>
+		} 
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		if (NAMES.putIfAbsent(name, Boolean.TRUE) != null) {</span>
+<span class="fc" id="L51">			String message = MessageFormat.format(&quot;Parâmetro {0} já está em uso.&quot;, name);</span>
+<span class="fc" id="L52">			LOGGER.severe(message);</span>
+<span class="fc" id="L53">			throw new SessionRuntimeException(message);</span>
+		}
+<span class="fc" id="L55">		this.name = name;</span>
+<span class="fc" id="L56">	}</span>
+
+	/**
+	 * Nome de identificação do parâmetro de sessão.
+	 *
+	 * @return name Nome do parâmetro de Sessão.
+	 */
+	public String getName() {
+<span class="nc" id="L64">		return name;</span>
+	}
+
+	@Override
+	// CHECKSTYLE:OFF
+	public int hashCode() {
+<span class="fc" id="L70">		final int prime = 31;</span>
+<span class="fc" id="L71">		int result = 1;</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
+<span class="fc" id="L73">		return result;</span>
+	}
+	// CHECKSTYLE:ON
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		if (this == obj) {</span>
+<span class="nc" id="L80">			return true;</span>
+		}
+<span class="nc bnc" id="L82" title="All 4 branches missed.">		if (obj == null || getClass() != obj.getClass()) {</span>
+<span class="nc" id="L83">			return false;</span>
+		}
+<span class="nc" id="L85">		SessionParam&lt;?&gt; other = (SessionParam&lt;?&gt;) obj;</span>
+<span class="nc" id="L86">		return Objects.equals(name, other.name);</span>
+	}
+
+	/**
+	 * Verifica se o parâmetro foi atribuído corretamente.
+	 *
+	 * @param value Apenas o valor para verificação.
+	 */
+	public void validate(T value) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">		if (value == null) {</span>
+<span class="fc" id="L96">			throw new SessionRuntimeException(&quot;Parâmetro nulo&quot;);</span>
+		}
+<span class="fc" id="L98">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

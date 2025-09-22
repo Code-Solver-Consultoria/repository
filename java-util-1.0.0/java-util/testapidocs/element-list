@@ -1,0 +1,5 @@
+module:br.com.codesolver.util.test
+br.com.codesolver.digester.test
+br.com.codesolver.session.test
+br.com.codesolver.util.test
+br.com.codesolver.uuid.test

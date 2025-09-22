@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeRuntimeException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.util</a> &gt; <span class="el_source">TimeRuntimeException.java</span></div><h1>TimeRuntimeException.java</h1><pre class="source lang-java linenums">package br.com.codesolver.util;
+
+/**
+ * Informa um erro na manipulação de um horário.
+ *
+ * &lt;p&gt;
+ * Esta exceção fornece vários construtores para diferentes cenários de uso:
+ *
+ * &lt;ul&gt;
+ *   &lt;li&gt;Construtor sem argumentos para exceções genéricas.&lt;/li&gt;
+ *   &lt;li&gt;Construtor com mensagem para descrição detalhada do erro.&lt;/li&gt;
+ *   &lt;li&gt;Construtor com mensagem e causa para encadeamento de exceções.&lt;/li&gt;
+ *   &lt;li&gt;Construtor com causa para encapsular exceções subjacentes.&lt;/li&gt;
+ *   &lt;li&gt;Construtor protegido com opções avançadas para supressão e gravabilidade da pilha de chamadas.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ */
+public class TimeRuntimeException extends RuntimeException {
+    
+    /**
+     * Constrói uma nova {@code TimeRuntimeException} com {@code null} como mensagem de detalhe.
+     * A causa não é inicializada e pode ser definida posteriormente através de {@link Throwable#initCause}.
+     */
+<span class="nc" id="L26">    public TimeRuntimeException() {</span>
+<span class="nc" id="L27">    }</span>
+
+    /**
+     * Constrói uma nova {@code TimeRuntimeException} com a mensagem de detalhe especificada.
+     *
+     * @param message mensagem explicando o motivo da exceção
+     */
+    public TimeRuntimeException(String message) {
+<span class="nc" id="L35">        super(message);</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * Constrói uma nova {@code TimeRuntimeException} com a mensagem de detalhe e causa especificadas.
+     *
+     * @param message mensagem de detalhe (recuperada posteriormente pelo método {@link #getMessage()})
+     * @param cause causa da exceção (recuperada posteriormente pelo método {@link #getCause()}).
+     *              O valor {@code null} indica que a causa é inexistente ou desconhecida.
+     */
+    public TimeRuntimeException(String message, Throwable cause) {
+<span class="nc" id="L46">        super(message, cause);</span>
+<span class="nc" id="L47">    }</span>
+
+    /**
+     * Constrói uma nova {@code TimeRuntimeException} com a causa especificada.
+     *
+     * @param cause causa subjacente desta exceção
+     */
+    public TimeRuntimeException(Throwable cause) {
+<span class="nc" id="L55">        super(cause);</span>
+<span class="nc" id="L56">    }</span>
+
+    /**
+     * Constrói uma nova {@code TimeRuntimeException} com mensagem de detalhe, causa,
+     * supressão e gravabilidade da pilha de chamadas configuráveis.
+     *
+     * @param message mensagem de detalhe (recuperada posteriormente pelo método {@link #getMessage()})
+     * @param cause causa da exceção (recuperada posteriormente pelo método {@link #getCause()}).
+     *              O valor {@code null} indica que a causa é inexistente ou desconhecida.
+     * @param enableSuppression indica se a supressão está habilitada ou desabilitada
+     * @param writableStackTrace indica se a pilha de chamadas pode ser gravada
+     */
+    protected TimeRuntimeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+<span class="nc" id="L69">        super(message, cause, enableSuppression, writableStackTrace);</span>
+<span class="nc" id="L70">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

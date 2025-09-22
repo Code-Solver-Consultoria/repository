@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Time.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.util</a> &gt; <span class="el_source">Time.java</span></div><h1>Time.java</h1><pre class="source lang-java linenums">package br.com.codesolver.util;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * No Java, utiliza-se a classe Date para gerenciar os horários. Mas, se o dia, mês e ano 
+ * não forem realmente iguais, a comparação de horários não será considerada igual.
+ *
+ * &lt;p&gt;
+ * A classe Time serve para gerenciar apenas os horários, sem que se tenha a preocupação com os
+ * outros fatores da classe Date.
+ *
+ * &lt;p&gt;
+ * A data base é 1 de Janeiro de 1970 (UTC).
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ */
+public class Time implements Serializable {
+
+	/** Valor máximo para segundos. */
+	private static final int MAX_SECONDS = 60;
+
+	/** Valor máximo para minutos. */
+	private static final int MAX_MINUTES = 60;
+
+	/** Valor máximo para horas. */
+	private static final int MAX_HOURS = 24;
+	
+	/**
+	 * Ano base para gerenciamento do horário.
+	 */
+	private static final int YEAR = 1970;
+	
+	/**
+	 * Mês base para gerenciamento do horário.
+	 */
+	private static final int MONTH = Calendar.JANUARY;
+	
+	/**
+	 * Dia base para gerenciamento do horário.
+	 */
+	private static final int DATE = 1;
+	
+	/**
+	 * Expressão regular para pré-validação do horário.
+	 */
+<span class="fc" id="L52">	private static final Pattern PATTERN = Pattern.compile(&quot;[0-2]\\d:[0-5]\\d:[0-5]\\d&quot;);</span>
+
+	/**
+	 * Calendário padrão para gerenciar os horários.
+	 */
+	private Calendar calendar;
+	
+	/**
+	 * Construtor padrão, assumindo o horário de criação.
+	 */
+<span class="fc" id="L62">	public Time() {</span>
+<span class="fc" id="L63">		calendar = new GregorianCalendar();</span>
+<span class="fc" id="L64">		calendar.set(Calendar.YEAR, YEAR);</span>
+<span class="fc" id="L65">		calendar.set(Calendar.MONTH, MONTH);</span>
+<span class="fc" id="L66">		calendar.set(Calendar.DATE, DATE);</span>
+<span class="fc" id="L67">		calendar.set(Calendar.MILLISECOND, 0);</span>
+<span class="fc" id="L68">		calendar.setFirstDayOfWeek(Calendar.SUNDAY);</span>
+<span class="fc" id="L69">	}</span>
+
+	/**
+	 * Construtor atribuindo o horário inicial. Os milisegundos são zerados.
+	 *
+	 * @param hour Hora, no formato 24 horas.
+	 * @param minute Minuto.
+	 * @param second Segundo.
+	 * @throws TimeRuntimeException Horário informado inválido.
+	 */
+	public Time(int hour, int minute, int second) {
+<span class="fc" id="L80">		this();</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">		if (second &gt;= MAX_SECONDS) {</span>
+<span class="nc" id="L82">			throw new TimeRuntimeException(&quot;Segundos devem ser menor que 60.&quot;);</span>
+		}
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">		if (minute &gt;= MAX_MINUTES) {</span>
+<span class="nc" id="L85">			throw new TimeRuntimeException(&quot;Minutos devem ser menor que 60.&quot;);</span>
+		}
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">		if (hour &gt;= MAX_HOURS) {</span>
+<span class="nc" id="L88">			throw new TimeRuntimeException(&quot;Horas devem ser menor que 24.&quot;);</span>
+		}
+<span class="fc" id="L90">		calendar.set(Calendar.SECOND, second);</span>
+<span class="fc" id="L91">		calendar.set(Calendar.MINUTE, minute);</span>
+<span class="fc" id="L92">		calendar.set(Calendar.HOUR_OF_DAY, hour);</span>
+<span class="fc" id="L93">	}</span>
+	
+	/**
+	 * Recupera a hora do dia, no formato 24 horas.
+	 *
+	 * @return int
+	 */
+	public int getHour() {
+<span class="fc" id="L101">		return calendar.get(Calendar.HOUR_OF_DAY);</span>
+	}
+	
+	/**
+	 * Recupera os minutos.
+	 *
+	 * @return int
+	 */
+	public int getMinute() {
+<span class="fc" id="L110">		return calendar.get(Calendar.MINUTE);</span>
+	}
+	
+	/**
+	 * Recupera os segundos do horário.
+	 *
+	 * @return int
+	 */
+	public int getSecond() {
+<span class="fc" id="L119">		return calendar.get(Calendar.SECOND);</span>
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	// CHECKSTYLE:OFF
+	public int hashCode() {
+<span class="nc" id="L128">		final int prime = 31;</span>
+<span class="nc" id="L129">		int result = 1;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">		result = prime * result + ((calendar == null) ? 0 : calendar.hashCode());</span>
+<span class="nc" id="L131">		return result;</span>
+	}
+	// CHECKSTYLE:ON
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">		if (this == obj) {</span>
+<span class="nc" id="L141">			return true;</span>
+		}
+<span class="pc bpc" id="L143" title="2 of 4 branches missed.">		if (obj == null || getClass() != obj.getClass()) {</span>
+<span class="nc" id="L144">			return false;</span>
+		}
+<span class="fc" id="L146">		Time other = (Time) obj;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">		if (calendar == null) {</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">			if (other.calendar != null) {</span>
+<span class="nc" id="L149">				return false;</span>
+			}
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">		} else if (toString().compareTo(other.toString()) != 0) {</span>
+<span class="nc" id="L152">			return false;</span>
+		}
+<span class="fc" id="L154">		return true;</span>
+	}
+	
+	/**
+	 * Recupera um horário baseado em uma String, no formato &lt;b&gt;hh:mm:ss&lt;/b&gt;.
+	 *
+	 * @param value Horário.
+	 * @return {@link Time}.
+	 */
+	public static Time parse(String value) {
+<span class="fc" id="L164">		Time result		= null;</span>
+<span class="fc" id="L165">		Matcher matcher = PATTERN.matcher(value); 	</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">		if (matcher.matches()) {</span>
+<span class="fc" id="L167">			String[] parts	= value.split(&quot;:&quot;);</span>
+<span class="fc" id="L168">			int hour		= Integer.parseInt(parts[0]);</span>
+<span class="fc" id="L169">			int minute		= Integer.parseInt(parts[1]);</span>
+<span class="fc" id="L170">			int second		= Integer.parseInt(parts[2]);</span>
+<span class="fc" id="L171">			result			= new Time(hour, minute, second);</span>
+<span class="fc" id="L172">		} else {</span>
+<span class="nc" id="L173">			throw new TimeRuntimeException(</span>
+<span class="nc" id="L174">					String.format(&quot;%s não tem um formato válido para horário (hh:mm:ss)&quot;, </span>
+					value));
+		}
+<span class="fc" id="L177">		return result;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L182">		return String.format(&quot;%02d:%02d:%02d&quot;, getHour(), getMinute(), getSecond());</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

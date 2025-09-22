@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SimpleSessionManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.session</a> &gt; <span class="el_source">SimpleSessionManager.java</span></div><h1>SimpleSessionManager.java</h1><pre class="source lang-java linenums">package br.com.codesolver.session;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Logger;
+
+/**
+ * Gerenciamento básico de objetos de sessão.
+ *
+ * &lt;p&gt;
+ * Os Maps do pacote &lt;b&gt;java.util.concurrent&lt;/b&gt; não foram adequados para o
+ * gerenciamento da sessão.
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ *
+ * @param &lt;T&gt; Herança de {@link Session}.
+ */
+public class SimpleSessionManager&lt;T extends Session&gt; implements SessionManager&lt;T&gt; {
+
+	/** Log da classe. */
+<span class="fc" id="L24">	private static final Logger LOGGER = Logger.getLogger(SimpleSessionManager.class.getName());</span>
+
+	/** Mensagem de erro no caso de falha em conseguir acesso exclusivo no componente. */
+	private static final String LOCK_ERROR = &quot;Não foi possível conseguir acesso exclusivo no gerenciador de sessão.&quot;;
+
+	/**
+	 * Lista de objetos de sessão.
+	 */
+	private List&lt;T&gt; sessions;
+
+	/**
+	 * Classe para inializar um novo objeto de sessão.
+	 */
+	private Class&lt;T&gt; clazz;
+
+	/**
+	 * Gerenciador de acesso concorrente.
+	 */
+	private Semaphore semaphore;
+
+	/**
+	 * Construtor padrão.
+	 *
+	 * @param clazz Classe para inicializar um novo objeto de sessão.
+	 */
+<span class="fc" id="L49">	public SimpleSessionManager(Class&lt;T&gt; clazz) {</span>
+<span class="fc" id="L50">		this.sessions = new ArrayList&lt;T&gt;();</span>
+<span class="fc" id="L51">		this.clazz = clazz;</span>
+<span class="fc" id="L52">		this.semaphore = new Semaphore(1);</span>
+<span class="fc" id="L53">	}</span>
+
+	/**
+	 * Cria um novo objeto de sessão para uso.
+	 *
+	 * @param &lt;V&gt;   Tipo de dados para o campo de sessão.
+	 * @param param {@link SessionParam} que identifique um único objeto
+	 *              {@link Session}.
+	 * @param value Valor do {@link SessionParam}.
+	 * @return {@link Session}.
+	 */
+	private &lt;V&gt; T newSession(SessionParam&lt;V&gt; param, V value) {
+<span class="fc" id="L65">		T session = null;</span>
+		try {
+<span class="fc" id="L67">			session = clazz.getConstructor().newInstance();</span>
+<span class="fc" id="L68">			session.setParam(param, value);</span>
+<span class="nc" id="L69">		} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException</span>
+				| InvocationTargetException | SecurityException e) {
+<span class="nc" id="L71">			String error = &quot;Erro ao criar o objeto de sessão.&quot;;</span>
+<span class="nc" id="L72">			LOGGER.severe(error);</span>
+<span class="nc" id="L73">			throw new SessionRuntimeException(error, e);</span>
+<span class="fc" id="L74">		}</span>
+<span class="fc" id="L75">		return session;</span>
+	}
+
+	@Override
+	public &lt;V&gt; T get(SessionParam&lt;V&gt; param, V value) {
+<span class="fc" id="L80">		return get(param, value, false);</span>
+	}
+
+	@Override
+	public &lt;V&gt; T get(SessionParam&lt;V&gt; param, V value, boolean create) {
+<span class="fc" id="L85">		T session = newSession(param, value);</span>
+		// Adiciona um novo objeto de sessão ou recupera o objeto já existente.
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if (sessions.contains(session)) {</span>
+			// Recupera o objeto da sessão para atualizar todos os parâmetros:
+<span class="fc" id="L89">			session = sessions.get(sessions.indexOf(session));</span>
+		} else {
+			// Se não encontrou, adicionar na lista.
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">			if (create) {</span>
+				try {
+<span class="fc" id="L94">					semaphore.acquire();</span>
+<span class="fc" id="L95">					sessions.add(session);</span>
+<span class="nc" id="L96">				} catch (InterruptedException e) {</span>
+<span class="nc" id="L97">					String error = LOCK_ERROR;</span>
+<span class="nc" id="L98">					LOGGER.severe(error);</span>
+<span class="nc" id="L99">					throw new SessionRuntimeException(error, e);</span>
+				} finally {
+<span class="fc" id="L101">					semaphore.release();</span>
+				}
+			}
+		}
+<span class="fc" id="L105">		return session;</span>
+	}
+
+	@Override
+	public &lt;V&gt; T remove(SessionParam&lt;V&gt; param, V value) {
+<span class="fc" id="L110">		T session = newSession(param, value);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">		if (sessions.contains(session)) {</span>
+<span class="fc" id="L112">			session = sessions.get(sessions.indexOf(session));</span>
+			try {
+<span class="fc" id="L114">				semaphore.acquire();</span>
+<span class="fc" id="L115">				sessions.remove(session);</span>
+<span class="nc" id="L116">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L117">				String error = LOCK_ERROR;</span>
+<span class="nc" id="L118">				LOGGER.severe(error);</span>
+<span class="nc" id="L119">				throw new SessionRuntimeException(error, e);</span>
+			} finally {
+<span class="fc" id="L121">				semaphore.release();</span>
+<span class="fc" id="L122">			}</span>
+		} else {
+<span class="fc" id="L124">			session = null;</span>
+		}
+<span class="fc" id="L126">		return session;</span>
+	}
+
+	@Override
+	public void clear() {
+<span class="fc" id="L131">		sessions.clear();</span>
+<span class="fc" id="L132">	}</span>
+
+	@Override
+	public int size() {
+<span class="fc" id="L136">		return sessions.size();</span>
+	}
+
+	@Override
+	public Session[] array() {
+<span class="fc" id="L141">		return sessions.toArray(new Session[sessions.size()]);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

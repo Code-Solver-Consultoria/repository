@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UUIDGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.uuid</a> &gt; <span class="el_source">UUIDGenerator.java</span></div><h1>UUIDGenerator.java</h1><pre class="source lang-java linenums">package br.com.codesolver.uuid;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * Gerador de UUID tipo 1 (time based). É um número de 128 bits, conforme a estrutura:
+ *
+ * &lt;table border=&quot;1&quot;&gt;
+ *     &lt;caption&gt;Estrutura do UUID v1 (time-based)&lt;/caption&gt;
+ *     &lt;tr&gt;
+ *       &lt;td colspan=&quot;10&quot;&gt;0&lt;/td&gt;
+ *       &lt;td colspan=&quot;10&quot;&gt;1&lt;/td&gt;
+ *       &lt;td colspan=&quot;10&quot;&gt;2&lt;/td&gt;
+ *       &lt;td colspan=&quot;2&quot;&gt;3&lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td&gt;0&lt;/td&gt;
+ *       &lt;td&gt;1&lt;/td&gt;
+ *       &lt;td&gt;2&lt;/td&gt;
+ *       &lt;td&gt;3&lt;/td&gt;
+ *       &lt;td&gt;4&lt;/td&gt;
+ *       &lt;td&gt;5&lt;/td&gt;
+ *       &lt;td&gt;6&lt;/td&gt;
+ *       &lt;td&gt;7&lt;/td&gt;
+ *       &lt;td&gt;8&lt;/td&gt;
+ *       &lt;td&gt;9&lt;/td&gt;
+ *       &lt;td&gt;0&lt;/td&gt;
+ *       &lt;td&gt;1&lt;/td&gt;
+ *       &lt;td&gt;2&lt;/td&gt;
+ *       &lt;td&gt;3&lt;/td&gt;
+ *       &lt;td&gt;4&lt;/td&gt;
+ *       &lt;td&gt;5&lt;/td&gt;
+ *       &lt;td&gt;6&lt;/td&gt;
+ *       &lt;td&gt;7&lt;/td&gt;
+ *       &lt;td&gt;8&lt;/td&gt;
+ *       &lt;td&gt;9&lt;/td&gt;
+ *       &lt;td&gt;0&lt;/td&gt;
+ *       &lt;td&gt;1&lt;/td&gt;
+ *       &lt;td&gt;2&lt;/td&gt;
+ *       &lt;td&gt;3&lt;/td&gt;
+ *       &lt;td&gt;4&lt;/td&gt;
+ *       &lt;td&gt;5&lt;/td&gt;
+ *       &lt;td&gt;6&lt;/td&gt;
+ *       &lt;td&gt;7&lt;/td&gt;
+ *       &lt;td&gt;8&lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td colspan=&quot;32&quot; style=&quot;text-align:center;&quot;&gt;time_low&lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td colspan=&quot;16&quot; style=&quot;text-align:center;&quot;&gt;time_mid&lt;/td&gt;
+ *       &lt;td colspan=&quot;16&quot; style=&quot;text-align:center;&quot;&gt;time_hi and version&lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td colspan=&quot;8&quot; style=&quot;text-align:center;&quot;&gt;clock_seq_hi&lt;/td&gt;
+ *       &lt;td colspan=&quot;8&quot; style=&quot;text-align:center;&quot;&gt;clock_seq_low&lt;/td&gt;
+ *       &lt;td colspan=&quot;16&quot; style=&quot;text-align:center;&quot;&gt;node (0-1)&lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td colspan=&quot;32&quot; style=&quot;text-align:center;&quot;&gt;node (2-5)&lt;/td&gt;
+ *     &lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * &lt;ul&gt;
+ * 	&lt;li&gt;&lt;b&gt;time_low&lt;/b&gt;: O menor campo de data e hora, com 4 bytes.&lt;/li&gt;
+ * 	&lt;li&gt;&lt;b&gt;time_mid&lt;/b&gt;: O campo do meio da data e hora, com 6 bytes.&lt;/li&gt;
+ * 	&lt;li&gt;&lt;b&gt;time_hi&lt;/b&gt;: O maior campo da data e hora, com 2 bytes.&lt;/li&gt;
+ * 	&lt;li&gt;&lt;b&gt;version&lt;/b&gt;: São os 4 bits do campo time_hi multiplexado para o valor 1 (número 1).&lt;/li&gt;
+ *	&lt;li&gt;&lt;b&gt;clock_seq_hi&lt;/b&gt;: Maior campo do sequencial do relógio multiplexado com a variante do algorítimo. É um byte.&lt;/li&gt;
+ *	&lt;li&gt;&lt;b&gt;clock_seq_low&lt;/b&gt;: Menor campo do sequencial do relógio com 1 byte.&lt;/li&gt;
+ *	&lt;li&gt;&lt;b&gt;node&lt;/b&gt;: Espaço para identificar a origem de criação do UUID.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;
+ * &lt;i&gt;Data e Hora é um número de 60 bits.&lt;/i&gt;
+ *
+ * &lt;b&gt;Baseado no documento: http://www.ietf.org/rfc/rfc4122.txt&lt;/b&gt;
+ *
+ * @author Luciano Vieira Rodrigues
+ * @version 1.0
+ * @since 04/04/2013
+ */
+@SuppressWarnings(&quot;checkstyle:AbbreviationAsWordInName&quot;)
+public class UUIDGenerator {
+
+    /**
+     * Números randômicos para criação dos identificadores universais.
+     */
+<span class="fc" id="L94">    private static final Random RANDOM = new Random(System.currentTimeMillis());</span>
+
+    /**
+     * Tamanho máximo para o nome do gerador de UUID.
+     */
+    private static final int NODE_MAX_LENGHT = 6;
+
+    /**
+     * A data base do Java é 01/01/1970, mas a data base do UTC e do cálculo do UUID é
+     * 15/10/1582. Para ajustar a data, é utilizado uma subtração dos nanosegundos.
+     */
+    private static final long TIME_OFF_SET = 0x01b21dd213814000L;
+
+    /**
+     * Como a precisão do Java é em milisegundos, a multiplicação ajuda a criar uma
+     * data com precisão em nanosegundos, como o UTC.
+     */
+    private static final long TIME_MULTIPLIER = 10000L;
+
+    /**
+     * O incremento para desempate de chaves quando são geradas no mesmo milisegundo.
+     * Para desempate, é possível criar 10000 no mesmo milisegundo.
+     */
+    private static final long TIME_ADVANCE = 100L;
+
+    /**
+     * Número randômico para gerar a sequência do UUID.
+     */
+<span class="fc" id="L122">    private static final short CLOCK = (short) RANDOM.nextInt();</span>
+
+    /** Máscara para remover o último byte na formação do número MSB. */
+    private static final int MASK_REMOVE_LAST_BYTE = ~0xF000;
+
+    /** Máscara para configuar o UUID como tipo 1. */
+    private static final int MASK_UUID_TYPE_1 = 0x1000;
+
+    /**
+     * Último nanosegundo usado para gerar uma chave UUID.
+     */
+    private AtomicLong lastNanos;
+
+    /**
+     * Nome de identificação do gerador de UUID.
+     */
+    private final String node;
+
+    /**
+     * Construtor padrão.
+     *
+     * @param node Nome de identificação para o gerador de UUID. Não pode ser nulo, vazio ou possuir
+     *             mais que 6 caracteres.
+     * @throws UUIDGeneratorNodeInvalid Nome de identificação inválido.
+     */
+<span class="fc" id="L147">    public UUIDGenerator(String node) {</span>
+<span class="fc bfc" id="L148" title="All 6 branches covered.">        if (node == null || node.isEmpty() || node.length() &gt; NODE_MAX_LENGHT) {</span>
+<span class="fc" id="L149">            throw new UUIDGeneratorNodeInvalid();</span>
+        }
+<span class="fc" id="L151">        this.node 		= node;</span>
+<span class="fc" id="L152">        this.lastNanos 	= new AtomicLong(Long.MIN_VALUE);</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Gera uma chave Universal.
+     *
+     * @return UUID versão 1.
+     */
+    public UUID generate() {
+<span class="fc" id="L161">        return new UUID(makeMSB(), makeLSB());</span>
+    }
+
+    /**
+     * É o primeiro parâmetro para o construtor do UUID.
+     *
+     * &lt;p&gt;
+     * Possui os campos:
+     *
+     * &lt;ul&gt;
+     * 	&lt;li&gt;time_low&lt;/li&gt;
+     * 	&lt;li&gt;time_mid&lt;/li&gt;
+     *  &lt;li&gt;time_hi and version&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return long
+     */
+    private long makeMSB() {
+<span class="fc" id="L179">        long result = 0L;</span>
+<span class="fc" id="L180">        long time = makeTime();</span>
+        // Trocando a posição dos bytes.
+<span class="fc" id="L182">        int timeHigh	= (int) (time &gt;&gt;&gt; Integer.SIZE);</span>
+<span class="fc" id="L183">        int timeLow		= (int) time;</span>
+<span class="fc" id="L184">        int timeMidHigh	= (timeHigh &lt;&lt; Short.SIZE) | (timeHigh &gt;&gt;&gt; Short.SIZE);</span>
+        // Adicionando a versão...
+<span class="fc" id="L186">        timeMidHigh &amp;= MASK_REMOVE_LAST_BYTE; 	// Remove o ultimo byte...</span>
+<span class="fc" id="L187">        timeMidHigh |= MASK_UUID_TYPE_1; 		// Configura o UUID para o tipo 1 (time-based)</span>
+        // Reconstruindo o número:
+<span class="fc" id="L189">        result = (long) timeMidHigh;</span>
+<span class="fc" id="L190">        result = result &lt;&lt; Integer.SIZE &gt;&gt;&gt; Integer.SIZE; 		// Removendo o sinal...</span>
+<span class="fc" id="L191">        result = ((long) timeLow) &lt;&lt; Integer.SIZE | result;</span>
+<span class="fc" id="L192">        return result;</span>
+    }
+
+    /**
+     * Cria um data no formato UTC, em nanosegundos.
+     *
+     * @return long
+     */
+    private long makeTime() {
+<span class="fc" id="L201">        long result = 0L;</span>
+
+<span class="fc" id="L203">        result = System.currentTimeMillis();</span>
+        // Multiplicando para conseguir os nanosegundos.
+<span class="fc" id="L205">        result *= TIME_MULTIPLIER;</span>
+        // Diferença dos nanosegundos para a data UTC (15/10/1582).
+<span class="fc" id="L207">        result += TIME_OFF_SET;</span>
+
+        // Se houve empate nos momento de geração de dois UUIDs, incrementa-se
+        // para gerar um valor único.
+        do {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">	        if (result &gt; lastNanos.get()) {</span>
+<span class="fc" id="L213">	        	lastNanos.set(result);</span>
+	        } else {
+<span class="fc" id="L215">	        	result = lastNanos.addAndGet(TIME_ADVANCE);</span>
+	        }
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        } while (lastNanos.get() &gt; result);</span>
+
+<span class="fc" id="L219">        return result;</span>
+    }
+
+    /**
+     * É o segundo parâmetro passado para o construtor do UUID.
+     *
+     * &lt;p&gt;
+     * Representando:
+     *
+     * &lt;ul&gt;
+     * 	&lt;li&gt;clock_seq_hi&lt;/li&gt;
+     * 	&lt;li&gt;clock_seq_low&lt;/li&gt;
+     * 	&lt;li&gt;node&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return long
+     */
+    @SuppressWarnings(&quot;checkstyle:MagicNumber&quot;)
+    private long makeLSB() {
+<span class="fc" id="L238">        long result			= 0L;</span>
+<span class="fc" id="L239">        ByteBuffer buffer 	= ByteBuffer.allocate(Long.SIZE / Byte.SIZE);</span>
+<span class="fc" id="L240">        buffer.putShort(CLOCK);</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        for (int i = 0; i &lt; (buffer.limit() - (Short.SIZE / Byte.SIZE) - node.length()); i++) {</span>
+<span class="fc" id="L242">            buffer.put((byte) RANDOM.nextInt());</span>
+        }
+<span class="fc" id="L244">        buffer.put(node.getBytes(Charset.defaultCharset()));</span>
+<span class="fc" id="L245">        buffer.flip();</span>
+<span class="fc" id="L246">        result  = buffer.getLong();</span>
+<span class="fc" id="L247">        result  = result &lt;&lt; 2 &gt;&gt;&gt; 2; 	    // remove dois bits MSB</span>
+<span class="fc" id="L248">        result |= 2L &lt;&lt; 62; 				// Configura os dois bits MSB para 10</span>
+<span class="fc" id="L249">        return result;</span>
+    }
+
+    /**
+     * Recupera a data de geração.
+     *
+     * @param uuid UUID
+     * @return Date
+     */
+    public static Date getDate(UUID uuid) {
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (uuid.version() != 1) {</span>
+<span class="fc" id="L260">            throw new UUIDGeneratorVersionInvalid();</span>
+        }
+<span class="fc" id="L262">        long time = (uuid.timestamp() - TIME_OFF_SET) / TIME_MULTIPLIER;</span>
+<span class="fc" id="L263">        return new Date(time);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

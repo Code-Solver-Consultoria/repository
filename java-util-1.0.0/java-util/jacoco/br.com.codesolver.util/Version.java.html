@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Version.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.util</a> &gt; <span class="el_source">Version.java</span></div><h1>Version.java</h1><pre class="source lang-java linenums">package br.com.codesolver.util;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * Utilitário para decomposição da versão de um pacote Java.
+ *
+ * &lt;p&gt;
+ * Isso é dependente do arquivo MANIFEST.MF, com as informações:
+ * 
+ * &lt;ul&gt;
+ * &lt;li&gt;Specification-Vendor: Code Solver&lt;/li&gt;
+ * &lt;li&gt;Specification-Title: java-util&lt;/li&gt;
+ * &lt;li&gt;Specification-Version: 1.0.0&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;p&gt;
+ * Onde a versão deve sempre ser composta por três identificadores separados por ponto.
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ */
+public class Version implements Serializable {
+
+	/** Nome para versão desconhecida. */
+	private static final String DEFAULT_NAME = &quot;&lt;unknown&gt;&quot;;
+
+	/** Valor padrão para os campos de versões. */
+	private static final String DEFUALT_VALUE = &quot;0&quot;;
+
+	/** Tamanho da versão contendo o campo maior. */
+	private static final int VERSION_MAJOR_SIZE = 1;
+
+	/** Tamanho da versão contendo o campo menor. */
+	private static final int VERSION_MINOR_SIZE = 2;
+
+	/** Tamanho da versão contendo o campo construção. */
+	private static final int VERSION_BUILD_SIZE = 3;
+
+	/**
+	 * Nome do aplicativo, retirado do arquivo MANIFEST.MF, entrada &lt;b&gt;Specification-Title&lt;/b&gt;.
+	 */
+	private String name;
+
+	/**
+	 * Maior número da versão do aplicativo, retirado do arquivo MANIFEST.MF, entrda &lt;b&gt;Specification-Version&lt;/b&gt;.
+	 */
+	private String major;
+
+	/**
+	 * Menor número da versão do aplicativo, retirado do arquivo MANIFEST.MF, entrda &lt;b&gt;Specification-Version&lt;/b&gt;.
+	 */
+	private String minor;
+
+	/**
+	 * Identificador da construção da versão do aplicativo, retirado do arquivo MANIFEST.MF, entrda
+	 * &lt;b&gt;Specification-Version&lt;/b&gt;.
+	 */
+	private String build;
+
+	/**
+	 * Construtor padrão.
+	 */
+<span class="fc" id="L65">	public Version() {</span>
+<span class="fc" id="L66">		this.name	= DEFAULT_NAME;</span>
+<span class="fc" id="L67">		this.major	= DEFUALT_VALUE;</span>
+<span class="fc" id="L68">		this.minor 	= DEFUALT_VALUE;</span>
+<span class="fc" id="L69">		this.build 	= DEFUALT_VALUE;</span>
+<span class="fc" id="L70">	}</span>
+
+	/**
+	 * Recupera o valor do campo {@link #name}.
+	 *
+	 * @return O {@link #name}.
+	 */
+	public String getName() {
+<span class="fc" id="L78">		return name;</span>
+	}
+
+	/**
+	 * Atribui o valor no campo {@link #name}.
+	 *
+	 * @param name O {@link #name} para configurar.
+	 */
+	public void setName(String name) {
+<span class="fc" id="L87">		this.name = name;</span>
+<span class="fc" id="L88">	}</span>
+
+	/**
+	 * Recupera o valor do campo {@link #major}.
+	 *
+	 * @return O {@link #major}.
+	 */
+	public String getMajor() {
+<span class="fc" id="L96">		return major;</span>
+	}
+
+	/**
+	 * Atribui o valor no campo {@link #major}.
+	 *
+	 * @param major O {@link #major} para configurar.
+	 */
+	public void setMajor(String major) {
+<span class="fc" id="L105">		this.major = major;</span>
+<span class="fc" id="L106">	}</span>
+
+	/**
+	 * Recupera o valor do campo {@link #minor}.
+	 *
+	 * @return O {@link #minor}.
+	 */
+	public String getMinor() {
+<span class="fc" id="L114">		return minor;</span>
+	}
+
+	/**
+	 * Agribui o valor no campo {@link #minor}.
+	 *
+	 * @param minor O {@link #minor} para configurar.
+	 */
+	public void setMinor(String minor) {
+<span class="fc" id="L123">		this.minor = minor;</span>
+<span class="fc" id="L124">	}</span>
+
+	/**
+	 * Recupera o valor do campo {@link #build}.
+	 *
+	 * @return O {@link #build}.
+	 */
+	public String getBuild() {
+<span class="fc" id="L132">		return build;</span>
+	}
+
+	/**
+	 * Atribui o valor no campo {@link #build}.
+	 *
+	 * @param build O {@link #build} para configurar.
+	 */
+	public void setBuild(String build) {
+<span class="fc" id="L141">		this.build = build;</span>
+<span class="fc" id="L142">	}</span>
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	// CHECKSTYLE:OFF
+	public int hashCode() {
+<span class="fc" id="L152">		final int prime = 31;</span>
+<span class="fc" id="L153">		int result = 1;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">		result = prime * result + ((build == null) ? 0 : build.hashCode());</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">		result = prime * result + ((major == null) ? 0 : major.hashCode());</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">		result = prime * result + ((minor == null) ? 0 : minor.hashCode());</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">		result = prime * result + ((name == null) ? 0 : name.hashCode());</span>
+<span class="fc" id="L158">		return result;</span>
+	}
+	// CHECKSTYLE:ON
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">		if (this == obj) {</span>
+<span class="fc" id="L170">			return true;</span>
+		}
+<span class="fc bfc" id="L172" title="All 2 branches covered.">		if (!(obj instanceof Version)) {</span>
+<span class="fc" id="L173">			return false;</span>
+		}
+<span class="fc" id="L175">		Version other = (Version) obj;</span>
+<span class="pc bpc" id="L176" title="2 of 4 branches missed.">		return Objects.equals(build, other.build) &amp;&amp; Objects.equals(major, other.major)</span>
+<span class="pc bpc" id="L177" title="1 of 4 branches missed.">				&amp;&amp; Objects.equals(minor, other.minor) &amp;&amp; Objects.equals(name, other.name);</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L182">		return String.format(&quot;%s-%s.%s.%s&quot;, name, major, minor, build);</span>
+	}
+
+	/**
+	 * Extrai informações de versão do pacote fornecido.
+	 *
+	 * @param pack Pacote com informações.
+	 * @throws VersionRuntimeException Falha na decomposição da versão extraída do pacote.
+	 */
+	public void decode(Package pack) {
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">		if (pack == null) {</span>
+<span class="fc" id="L193">			throw new VersionRuntimeException(&quot;As informações de versão não foram fornecidas.&quot;);</span>
+		}
+<span class="nc" id="L195">		name = pack.getSpecificationTitle();</span>
+<span class="nc" id="L196">		String[] values = pack.getImplementationVersion().split(&quot;\\.&quot;);</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		if (values.length &gt;= VERSION_MAJOR_SIZE) {</span>
+<span class="nc" id="L198">			major = values[0];</span>
+		}
+<span class="nc bnc" id="L200" title="All 2 branches missed.">		if (values.length &gt;= VERSION_MINOR_SIZE) {</span>
+<span class="nc" id="L201">			minor = values[1];</span>
+		}
+<span class="nc bnc" id="L203" title="All 2 branches missed.">		if (values.length &gt;= VERSION_BUILD_SIZE) {</span>
+<span class="nc" id="L204">			build = values[2];</span>
+		}
+<span class="nc" id="L206">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

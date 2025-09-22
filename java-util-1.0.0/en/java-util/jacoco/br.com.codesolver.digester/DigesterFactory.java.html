@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DigesterFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-util</a> &gt; <a href="index.source.html" class="el_package">br.com.codesolver.digester</a> &gt; <span class="el_source">DigesterFactory.java</span></div><h1>DigesterFactory.java</h1><pre class="source lang-java linenums">package br.com.codesolver.digester;
+
+import java.security.NoSuchAlgorithmException;
+import java.text.MessageFormat;
+import java.util.logging.Logger;
+
+/**
+ * Cria o processador de HASH adequado para o algorítimo informado.
+ *
+ * @author &lt;a href=&quot;mailto:luciano@codesolver.com.br&quot;&gt;Luciano Vieira Rodrigues&lt;/a&gt;
+ * @since 2025-08-26
+ * @see AlgorithmType
+ */
+public final class DigesterFactory {
+
+	/** Log da classe. */
+<span class="fc" id="L17">	private static final Logger LOGGER = Logger.getLogger(DigesterFactory.class.getName());</span>
+
+	/** 
+	 * Construtor oculto.
+	 */
+	private DigesterFactory() {
+	}
+
+	/**
+	 * Recupera o processador de HASH adequando para o algorítimo.
+	 *
+	 * @param &lt;T&gt; Um descendente de {@link Digester}.
+	 * @param algorithm {@link AlgorithmType}.
+	 * @return {@link Digester}.
+	 * @throws DigesterException Algorítimo inválido.
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public static &lt;T extends Digester&gt; T getInstance(AlgorithmType algorithm) {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		if (algorithm == null) {</span>
+<span class="fc" id="L36">            String message = &quot;Algoritimo não pode ser nulo.&quot;;</span>
+<span class="fc" id="L37">            LOGGER.severe(message);</span>
+<span class="fc" id="L38">            throw new DigesterException(message);</span>
+        }
+<span class="fc" id="L40">		T result = null;</span>
+		try {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">			switch (algorithm) {</span>
+				case CRC16: 
+<span class="fc" id="L44">					result = (T) new DigesterCRC16();</span>
+<span class="fc" id="L45">					break;</span>
+				default:
+<span class="fc" id="L47">					result = (T) new DigesterSUN(algorithm);</span>
+			}
+<span class="nc" id="L49">		} catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L50">			String message = MessageFormat.format(&quot;Algoritimo {0} inválido.&quot;, algorithm.name());</span>
+<span class="nc" id="L51">            LOGGER.severe(message);</span>
+<span class="nc" id="L52">            throw new DigesterException(message, e);</span>
+<span class="fc" id="L53">		} </span>
+<span class="fc" id="L54">		return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
