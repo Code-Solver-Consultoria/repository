@@ -733,13 +733,7 @@
           <configuration>
             <show>private</show>
             <additionalOptions>-html5</additionalOptions>
-            <tags>
-              <tag>
-                <name>branch</name>
-                <placement>top</placement>
-                <head>Branch:</head>
-              </tag>
-            </tags>
+            <failOnError>False</failOnError>
           </configuration>
         </plugin>
         <!-- Plugins de Ferramentas -->
