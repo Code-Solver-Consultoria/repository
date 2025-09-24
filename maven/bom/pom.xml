@@ -196,6 +196,7 @@
                       <suppress checks="StaticVariableName" files="[a-z,A-Z,0-9]*(_.java)" />
                       <suppress checks="AbstractClassName" files="[a-z,A-Z,0-9]*(_.java)" />
                       <suppress checks="EmptyLineSeparator" files="[a-z,A-Z,0-9]*(_.java)" />
+                      <suppress checks="ImportOrder" files="[a-z,A-Z,0-9]*(_.java)" />
                     </suppressions>
                   </echoxml>
                 </target>
