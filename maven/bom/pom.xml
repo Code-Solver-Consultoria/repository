@@ -35,6 +35,8 @@
     <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+    <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
+    <maven-ear-plugin.version>3.4.0</maven-ear-plugin.version>
     <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
     <maven-site-plugin.version>3.21.0</maven-site-plugin.version>
     <!-- Plugins de Gerenciamento de Código -->
@@ -546,6 +548,33 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>${maven-war-pluginversion}</version>
+          <configuration>
+            <webResources>
+              <resource>
+                <directory>src/main/webapp/WEB-INF</directory>
+                <filtering>true</filtering>
+                <targetPath>WEB-INF</targetPath>
+                <includes>
+                  <include>**/*.xml</include>
+                  <include>*.xml</include>
+                </includes>
+              </resource>
+            </webResources>
+          </configuration>
+        </plugin>
+			  <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ear-plugin</artifactId>
+					<version>${maven-ear-plugin.version}</version>
+					<configuration>
+						<defaultLibBundleDir>lib</defaultLibBundleDir>
+						<filtering>true</filtering>
+					</configuration>
+				</plugin>        
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
