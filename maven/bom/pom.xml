@@ -752,7 +752,7 @@
             <linkXRef>true</linkXRef>
             <skipEmptyReport>false</skipEmptyReport>
             <excludes>
-              <exclude>**/generated-sources/*_.java</exclude>
+              <exclude>**/*_.java</exclude>
             </excludes>
           </configuration>
           <executions>
