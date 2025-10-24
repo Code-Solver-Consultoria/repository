@@ -415,7 +415,7 @@
                         <module name="NoCodeInFile" />
                         <module name="OuterTypeFilename" />
                         <module name="TodoComment">
-                          <property name="format" value="(TODO|FIXME)" />
+                          <property name="format" value="(TODO)|(FIXME)" />
                         </module>
                         <module name="UncommentedMain">
                           <property name="excludedClasses" value="\.Main$|\.Application$" />
@@ -751,6 +751,9 @@
             <analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation>
             <linkXRef>true</linkXRef>
             <skipEmptyReport>false</skipEmptyReport>
+            <excludes>
+              <exclude>**/generated/*_.java</exclude>
+            </excludes>
           </configuration>
           <executions>
             <execution>
