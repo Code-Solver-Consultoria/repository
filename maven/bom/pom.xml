@@ -754,6 +754,10 @@
             <excludes>
               <exclude>**/*_.java</exclude>
             </excludes>
+            <excludeRoots>
+              <excludeRoot>target/generated-sources</excludeRoot>
+              <excludeRoot>**/model/*</excludeRoot>
+            </excludeRoots>
           </configuration>
           <executions>
             <execution>
