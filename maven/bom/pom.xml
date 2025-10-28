@@ -751,13 +751,13 @@
             <analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation>
             <linkXRef>true</linkXRef>
             <skipEmptyReport>false</skipEmptyReport>
-            <excludes>
-              <exclude>**/*_.java</exclude>
-            </excludes>
-            <excludeRoots>
-              <excludeRoot>target/generated-sources</excludeRoot>
-              <excludeRoot>**/model/*</excludeRoot>
-            </excludeRoots>
+						<excludes>
+							<exclude>**/model/*.java</exclude>
+							<exclude>**/model/*_.java</exclude>
+						</excludes>
+						<excludeRoots>
+							<excludeRoot>target/generated-sources/annotations</excludeRoot>
+						</excludeRoots>
           </configuration>
           <executions>
             <execution>
