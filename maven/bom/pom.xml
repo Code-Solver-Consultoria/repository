@@ -161,6 +161,10 @@
                       <Match>
                         <Source name="~.*\_.java" />
                       </Match>
+                      <Match>
+                        <Package name="~.*\.model(\..*)?" />
+                        <Bug code="EI,EI2" />
+                      </Match>
                     </FindBugsFilter>
                   </echoxml>
                 </target>
