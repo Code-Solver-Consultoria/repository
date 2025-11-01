@@ -159,7 +159,7 @@
                   <echoxml file="${spotbugs.exclusions.location}">
                     <FindBugsFilter>
                       <Match>
-                        <Source name="~.*\_" />
+                        <Source name="~.*\_.java" />
                       </Match>
                       <Match>
                         <Package name="~.*\.model(\..*)?" />
