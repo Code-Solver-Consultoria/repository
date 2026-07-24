@@ -8,9 +8,9 @@
 <div id="overview"><a href="../../../../../../apidocs/br/com/codesolver/scap/security/CSPrincipalTransformer.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> br.com.codesolver.scap.security;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.security.Principal;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.logging.Level;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.logging.Logger;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.lang.System.Logger;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.lang.System.Logger.Level;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.security.Principal;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.wildfly.extension.elytron.capabilities.PrincipalTransformer;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   
@@ -25,25 +25,22 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment">	 * Log da classe.</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOGGER = Logger.getLogger(CSPrincipalTransformer.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOGGER = System.getLogger(CSPrincipalTransformer.<strong class="jxr_keyword">class</strong>.getName());
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  	
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  	@Override
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">public</strong> Principal apply(Principal principal) {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		<strong class="jxr_keyword">if</strong> (LOGGER.isLoggable(Level.FINEST)) {
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  			LOGGER.log(Level.FINEST, String.format(<span class="jxr_string">"Tranformando a identidade do usuário \&quot;%s\&quot;."</span>, 
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  				principal.getName()));
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		}
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		CSPrincipal result = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		CSPrincipalCache cache = CSPrincipalCache.getInstance();
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">if</strong> (cache.constains(principal.getName())) {
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			result = cache.get(principal.getName()); 
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			result = <strong class="jxr_keyword">new</strong> <a name="CSPrincipal" href="../../../../../br/com/codesolver/scap/security/CSPrincipal.html#CSPrincipal">CSPrincipal</a>(principal.getName());
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  			cache.add(result);
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		}
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  }
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		LOGGER.log(Level.TRACE, () -&gt; String.format(<span class="jxr_string">"Tranformando a identidade do usuário \&quot;%s\&quot;."</span>, principal.getName()));
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		CSPrincipal result = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		CSPrincipalCache cache = CSPrincipalCache.getInstance();
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">if</strong> (cache.constains(principal.getName())) {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  			result = cache.get(principal.getName()); 
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  			result = <strong class="jxr_keyword">new</strong> <a name="CSPrincipal" href="../../../../../br/com/codesolver/scap/security/CSPrincipal.html#CSPrincipal">CSPrincipal</a>(principal.getName());
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			cache.add(result);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		}
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	}
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2026</div>

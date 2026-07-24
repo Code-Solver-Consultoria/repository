@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"br.com.codesolver.scap.security"},{"l":"br.com.codesolver.scap.security.model"},{"l":"br.com.codesolver.scap.security.persistence"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"br.com.codesolver.scap.security"},{"l":"br.com.codesolver.scap.security.model"}];updateSearchResults();
